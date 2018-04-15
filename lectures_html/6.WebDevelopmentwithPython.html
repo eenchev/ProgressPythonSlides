@@ -12521,6 +12521,43 @@ Include the webapp URLs file in the project's URLs.</p>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Class-based-views">Class-based views<a class="anchor-link" href="#Class-based-views">&#182;</a></h1><hr>
+<p><a href="https://ibb.co/f8LiZ7"><img src="https://preview.ibb.co/jFEXSS/views.png" alt="views" border="0"></a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Create-a-class-based-view-for-Comment-Detail:">Create a class based view for Comment Detail:<a class="anchor-link" href="#Create-a-class-based-view-for-Comment-Detail:">&#182;</a></h1><hr>
+<p>Edit your path:</p>
+<div class="highlight"><pre><span></span><span class="n">path</span><span class="p">(</span><span class="s1">&#39;comment/&lt;int:comment_id&gt;/&#39;</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">CommentDetailView</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;detail&#39;</span><span class="p">),</span>
+</pre></div>
+<p>Change your views.py:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="kn">import</span> <span class="n">DetailView</span>
+
+<span class="k">class</span> <span class="nc">CommentDetailView</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Comment</span>
+    <span class="n">pk_url_kwarg</span> <span class="o">=</span> <span class="s2">&quot;comment_id&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">context</span>
+</pre></div>
+<p>Add template corresponding to the view in webapp, called comment_detail.html</p>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>{{ object.name }}<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ object.comment }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Small-caveats-before-going-to-production">Small caveats before going to production<a class="anchor-link" href="#Small-caveats-before-going-to-production">&#182;</a></h1><hr>
 
 <pre><code>* When you set up DEBUG=False, then you must specify a list of ALLOWED_HOSTS
