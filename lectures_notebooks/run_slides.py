@@ -14,7 +14,7 @@ except ImportError:
     pipmain(['install', 'jupyter'])
 
 parser=argparse.ArgumentParser(
-    description='''Simple script to run ipynb notebooks as slides. \
+    description='''Simple script to run ipynb notebooks as slides.
             Installs jupyter if not present.''')
 parser.add_argument('--file', type=str, default='1.Python101.ipynb', 
     help='Specifies the target file. If left empty runs 1.Python101.ipynb')
@@ -22,8 +22,8 @@ args, unknown = parser.parse_known_args()
 
 if len(unknown)>1:
     parser.print_help()
-    print('\nYou passed extra arguments. Did you try to pass filename?')
-    print('Try the --file argument. Please refer to the help above.')
+    print('\nYou passed extra arguments. Did you try to pass filename?'
+            ' Try the --file argument. Please refer to the help above.')
     sys.exit(1)
 
 elif len(unknown) == 1:
@@ -32,7 +32,14 @@ elif len(unknown) == 1:
 else:
     file_name = args.file
 
-command_string = 'jupyter nbconvert {} --to slides --post serve'.format(file_name)
+def check_extension(f_name, extension=".ipynb"):
+    if f_name.lower().endswith(extension) == True:
+        return f_name
+    else:
+        print("Wrong file format. Please try with another file.")
+        sys.exit(1)
+
+command_string = 'jupyter nbconvert {} --to slides --post serve'.format(check_extension(file_name))
 os_platform = platform.system()
 
 if os_platform == 'Windows':
@@ -44,4 +51,4 @@ elif os_platform in ['Linux','Darwin']:
     subprocess.call(command_string, shell=True)
 
 else:
-    print('Unrecognized platform')
+    print('Unrecognised platform')
