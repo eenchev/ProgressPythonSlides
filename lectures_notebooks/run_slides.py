@@ -2,16 +2,9 @@ import subprocess
 import sys
 import platform
 import argparse
+import pkgutil
 
-try:
-    from pip import main as pipmain
-except:
-    from pip._internal import main as pipmain
-
-try:
-    import jupyter
-except ImportError:
-    pipmain(['install', 'jupyter'])
+os_platform = platform.system()
 
 parser=argparse.ArgumentParser(
     description='''Simple script to run ipynb notebooks as slides.
@@ -19,6 +12,46 @@ parser=argparse.ArgumentParser(
 parser.add_argument('--file', type=str, default='1.Python101.ipynb', 
     help='Specifies the target file. If left empty runs 1.Python101.ipynb')
 args, unknown = parser.parse_known_args()
+
+
+def run_command(command,os=os_platform):
+    if os == 'Windows':
+        return subprocess.call(['C:\\windows\\system32\\cmd.exe',
+            '/C', 
+            command])
+    elif os in ['Linux', 'Darwin']:
+        return subprocess.call(command, shell=True)
+    else:
+        print('Unrecognised platform')
+        sys.exit(1)
+
+
+def load_pip():
+    pip_loader = pkgutil.find_loader('pip')
+    pip_found = pip_loader is not None
+
+    if pip_found == False:
+        run_command('easy_install pip')
+        run_command('python {} {}'.format(sys.argv[0], args.file))
+        sys.exit(1)
+
+    try:
+        from pip import main as pipmain
+    except ImportError:
+        from pip._internal import main as pipmain
+            
+    try:
+        return pipmain
+    except:
+        print("Could not import pip.")
+        sys.exit(1)
+
+pipmain = load_pip()
+
+try:
+    import jupyter
+except ImportError:
+    pipmain(['install', 'jupyter'])
 
 if len(unknown)>1:
     parser.print_help()
@@ -39,16 +72,4 @@ def check_extension(f_name, extension=".ipynb"):
         print("Wrong file format. Please try with another file.")
         sys.exit(1)
 
-command_string = 'jupyter nbconvert {} --to slides --post serve'.format(check_extension(file_name))
-os_platform = platform.system()
-
-if os_platform == 'Windows':
-    subprocess.call(['C:\\windows\\system32\\cmd.exe',
-            '/C', 
-            command_string])
-                
-elif os_platform in ['Linux','Darwin']:
-    subprocess.call(command_string, shell=True)
-
-else:
-    print('Unrecognised platform')
+run_command('jupyter nbconvert {} --to slides --post serve'.format(check_extension(file_name)))
