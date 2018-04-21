@@ -22,8 +22,8 @@ args, unknown = parser.parse_known_args()
 
 if len(unknown)>1:
     parser.print_help()
-    print("\nYou passed extra arguments. Did you try to pass filename?")
-    print("Try the --file argument. Please refer to the help above.")
+    print('\nYou passed extra arguments. Did you try to pass filename?')
+    print('Try the --file argument. Please refer to the help above.')
     sys.exit(1)
 
 elif len(unknown) == 1:
