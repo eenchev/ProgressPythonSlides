@@ -29,7 +29,7 @@ if os_platform == 'Windows':
             '/C', 
             command_string])
                 
-elif os_platform == 'Linux':
+elif os_platform in ['Linux','Darwin']:
     subprocess.call(command_string, shell=True)
 
 else:
