@@ -26,8 +26,8 @@ os_platform = platform.system()
 
 if os_platform == 'Windows':
     subprocess.call(['C:\\windows\\system32\\cmd.exe',
-                '/C', 
-                command_string])
+            '/C', 
+            command_string])
                 
 elif os_platform == 'Linux':
     subprocess.call(command_string, shell=True)
