@@ -4,8 +4,6 @@ import platform
 import argparse
 import pkgutil
 
-os_platform = platform.system()
-
 parser=argparse.ArgumentParser(
     description='''Simple script to run ipynb notebooks as slides.
             Installs jupyter if not present.''')
@@ -14,12 +12,14 @@ parser.add_argument('--file', type=str, default='1.Python101.ipynb',
 args, unknown = parser.parse_known_args()
 
 
-def run_command(command,os=os_platform):
-    if os == 'Windows':
+def run_command(command):
+    os_platform = platform.system()
+    
+    if os_platform == 'Windows':
         return subprocess.call(['C:\\windows\\system32\\cmd.exe',
             '/C', 
             command])
-    elif os in ['Linux', 'Darwin']:
+    elif os_platform in ['Linux', 'Darwin']:
         return subprocess.call(command, shell=True)
     else:
         print('Unrecognised platform')
@@ -46,11 +46,10 @@ def load_pip():
         print("Could not import pip.")
         sys.exit(1)
 
-pipmain = load_pip()
-
 try:
     import jupyter
 except ImportError:
+    pipmain = load_pip()
     pipmain(['install', 'jupyter'])
 
 if len(unknown)>1:
