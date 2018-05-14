@@ -71,4 +71,7 @@ def check_extension(f_name, extension=".ipynb"):
         print("Wrong file format. Please try with another file.")
         sys.exit(1)
 
-run_command('jupyter nbconvert {} --to slides --post serve'.format(check_extension(file_name)))
+try:
+    run_command('jupyter nbconvert {} --to slides --post serve'.format(check_extension(file_name)))
+except KeyboardInterrupt:
+    sys.exit("Exiting...")
